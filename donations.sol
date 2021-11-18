@@ -1,24 +1,29 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity ^0.5.0;
 
 contract donations{
      
-      uint totalDonations; 
-  address payable owner; 
+
+  address payable public owner; 
+  address public donators;
 
  
-  constructor() {
-    owner = payable(msg.sender);
+  constructor() public{
+    owner = (msg.sender);
   }
 
+    function getDonation() public payable{
+        require(msg.value >= .001 ether);
+        donators.push(msg.sender);
+    }
 
-  function donate() public payable {
-    (bool success,) = owner.call{value: msg.value}("");
-    require(success, "Failed to send money");
-  }
+function transferToOwner() external {
+    require(msg.sender == owner);
+    owner.transfer(address(this).balance);
+}
 
-  function getTotalDonations() view public returns(uint) {
-    return totalDonations;
-  }
+function getDonators() public view returns (address[] memory){
+    return donators;
+}
 }
