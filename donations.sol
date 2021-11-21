@@ -4,12 +4,14 @@ pragma solidity ^0.5.0;
 
 contract donations{
      
+     
+     mapping (address => uint) balance;
 
   address payable public owner; 
   address[] public donators;
 
     event newDonation(
-        address indxed,
+        address[] indxed,
         uint amouth
         );
  
@@ -20,7 +22,8 @@ contract donations{
     function getDonation() public payable{
         require(msg.value >= .001 ether);
         donators.push(msg.sender);
-        emit newDonation(donators , msg.value);
+     
+      emit newDonation(donators , msg.value);
     }
 
 function transferToOwner() external {
