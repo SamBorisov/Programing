@@ -6,7 +6,7 @@ contract donations{
      
 
   address payable public owner; 
-  address public donators;
+  address[] public donators;
 
     event newDonation(
         address indxed,
