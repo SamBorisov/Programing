@@ -1,0 +1,64 @@
+
+1-Колко акаунта(спестяващи сметки и карти) имат работещите
+
+select e.`First Name`,e.`Last Name`, count(ao.`Saving Account#`) as SA, count(ao.`Card Account#`) as CA
+from EMPLOYEE e
+left join `ACCOUNT OWNER` ao 
+on e.`Unique Citizen Number#`= ao.`Employee Unique Citizen Number#`
+group by e.`First Name`,e.`Last Name`
+
+
+
+2-Показва имената на работниците с акунти отоврени от началото на годината:
+
+select e.`First Name`,e.`Last Name`, s.`Open Date`,s.`Account#`
+from EMPLOYEE e
+inner join `ACCOUNT OWNER` ao 
+on e.`Unique Citizen Number#`= ao.`Employee Unique Citizen Number#`
+inner join SAVINGS s
+on s.`Account#` = ao.`Saving Account#`
+where s.`Open Date`>='01/01/2021'
+
+
+
+3-Да се изтеглят 2те такси които плащаме на банката месечно:
+
+select s.`ATM Fee` , c.`Bounce Fee` 
+from SAVINGS s 
+inner join `ACCOUNT OWNER` ao 
+on s.`Account#`= ao.`Saving Account#`
+inner join CARD c
+on c.`Account#` = ao.`Card Account#`
+
+
+
+4-Имената на работещите с първо име започващо със "с" и второ име започващо с "ц" или "б":
+
+select * from EMPLOYEE
+where  `First Name` like 's%' and (`Last Name` like 'c%' or `Last Name` like 'b%')
+
+
+
+5-Бранча с най-много работници:
+
+select  er.`Branch#`
+from EMPLOYEE e
+inner join `EMPLOYEE ROSTER` er
+on e.`Unique Citizen Number#`= er.`Unique Citizen Number#`
+group by er.`Branch#`
+order by count(e.`Unique Citizen Number#`) desc
+limit 1
+
+
+
+6-Имената на работещите в определен бранч:
+
+select `First name` 
+from EMPLOYEE e
+inner join `EMPLOYEE ROSTER` er
+on e.`Unique Citizen Number#`= er.`Unique Citizen Number#`
+inner join `BANK BRANCH` bb
+on er.`Branch#`= bb.`Branch#`
+where `Branch Name` = 'име на бранч'
+
+
