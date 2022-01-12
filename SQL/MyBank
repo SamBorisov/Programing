@@ -1,0 +1,148 @@
+
+
+-- Create tables section -------------------------------------------------
+
+-- Table SAVINGS
+
+CREATE TABLE `SAVINGS`
+(
+  `Account#` Varchar(10) NOT NULL,
+  `Open Date` Date NOT NULL,
+  `Close Date` Date,
+  `Over Draft Limit` Decimal(10,2),
+  `ATM Enabled` Bool NOT NULL,
+  `ATM Fee` Decimal(10,2) NOT NULL,
+  `Dailit ATM Limit` Decimal(10,2),
+  `ATM Card #` Varchar(16),
+  `Branch#` Int NOT NULL,
+  `ID#` Int NOT NULL
+)
+;
+
+CREATE INDEX `IX_Relationship4_1` ON `SAVINGS` (`Branch#`)
+;
+
+CREATE INDEX `IX_Relationship6` ON `SAVINGS` (`ID#`)
+;
+
+ALTER TABLE `SAVINGS` ADD PRIMARY KEY (`Account#`)
+;
+
+-- Table CARD
+
+CREATE TABLE `CARD`
+(
+  `Account#` Varchar(10) NOT NULL,
+  `Open Date` Date NOT NULL,
+  `Expire Data` Date,
+  `Over Draft Limit` Decimal(10,2),
+  `Free Checking` Bool NOT NULL,
+  `Card number #` Char(16) NOT NULL,
+  `CVV #` Char(3),
+  `Bounce Fee` Decimal(10,2),
+  `Branch#` Int NOT NULL
+)
+;
+
+CREATE INDEX `IX_Relationship4_2` ON `CARD` (`Branch#`)
+;
+
+ALTER TABLE `CARD` ADD PRIMARY KEY (`Account#`)
+;
+
+-- Table ACCOUNT OWNER
+
+CREATE TABLE `ACCOUNT OWNER`
+(
+  `Saving Account#` Varchar(10) NOT NULL,
+  `Card Account#` Varchar(10) NOT NULL,
+  `Customer Unique Citizen Number#` Char(10) NOT NULL,
+  `Employee Unique Citizen Number#` Char(10) NOT NULL
+)
+;
+
+ALTER TABLE `ACCOUNT OWNER` ADD PRIMARY KEY (`Saving Account#`, `Card Account#`, `Customer Unique Citizen Number#`, `Employee Unique Citizen Number#`)
+;
+
+-- Table BANK BRANCH
+
+CREATE TABLE `BANK BRANCH`
+(
+  `Branch#` Int NOT NULL,
+  `Branch Name` Varchar(30) NOT NULL,
+  `Phone#` Char(10) NOT NULL,
+  `Street Address` Varchar(30),
+  `City` Varchar(30),
+  `Zip Code` Char(5)
+)
+;
+
+ALTER TABLE `BANK BRANCH` ADD PRIMARY KEY (`Branch#`)
+;
+
+-- Table INTEREST RATE
+
+CREATE TABLE `INTEREST RATE`
+(
+  `ID#` Int NOT NULL,
+  `Percent Rate` Decimal(2,2) NOT NULL,
+  `Rate Period` Int NOT NULL
+)
+;
+
+ALTER TABLE `INTEREST RATE` ADD PRIMARY KEY (`ID#`)
+;
+
+-- Table CUSTOMER
+
+CREATE TABLE `CUSTOMER`
+(
+  `Unique Citizen Number#` Char(10) NOT NULL,
+  `First Name` Varchar(30) NOT NULL,
+  `Last Name` Varchar(40) NOT NULL,
+  `Birth Date` Date,
+  `Gender` Char(1)
+)
+;
+
+ALTER TABLE `CUSTOMER` ADD PRIMARY KEY (`Unique Citizen Number#`)
+;
+
+-- Table EMPLOYEE
+
+CREATE TABLE `EMPLOYEE`
+(
+  `Unique Citizen Number#` Char(10) NOT NULL,
+  `First Name` Varchar(30) NOT NULL,
+  `Last Name` Varchar(40) NOT NULL,
+  `Birth Date` Date,
+  `Gender` Char(1)
+)
+;
+
+ALTER TABLE `EMPLOYEE` ADD PRIMARY KEY (`Unique Citizen Number#`)
+;
+
+-- Table EMPLOYEE ROSTER
+
+CREATE TABLE `EMPLOYEE ROSTER`
+(
+  `Branch#` Int NOT NULL,
+  `Unique Citizen Number#` Char(10) NOT NULL
+)
+;
+
+ALTER TABLE `EMPLOYEE ROSTER` ADD PRIMARY KEY (`Branch#`, `Unique Citizen Number#`)
+;
+
+-- Create foreign keys (relationships) section -------------------------------------------------
+
+ALTER TABLE `SAVINGS` ADD CONSTRAINT `Relationship6` FOREIGN KEY (`ID#`) REFERENCES `INTEREST RATE` (`ID#`) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE `EMPLOYEE ROSTER` ADD CONSTRAINT `Relationship7` FOREIGN KEY (`Branch#`) REFERENCES `BANK BRANCH` (`Branch#`) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE `EMPLOYEE ROSTER` ADD CONSTRAINT `Relationship8` FOREIGN KEY (`Unique Citizen Number#`) REFERENCES `EMPLOYEE` (`Unique Citizen Number#`) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
